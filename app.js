@@ -12,24 +12,12 @@ const server = express()
 
 const io = socketIO(server);
 
-const users = {};
-const players = {};
+const lobbies = {};
 
 io.on("connection", (socket) => {
   console.log("Client connected");
-  socket.on("new-user", name => {
-    users[socket.id] = name;
-    if (Object.keys(users).length < 3) {
-      if (players.hasOwnProperty("one")) {
-        players.two = socket.id;
-        players[socket.id] = 2;
-      } else {
-        players.one = socket.id;
-        players[socket.id] = 1;
-      }
-    }
-    socket.emit("new-player", {"users": users, "id": socket.id, "num": players[socket.id], "name": name});
-    socket.broadcast.emit("user-connected", name);
+  socket.on("new-game", lname => {
+    lobbies.push({lname : {"src":[], "players":[]}});
   });
 
   socket.on("send-chat-message", message => {
