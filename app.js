@@ -12,12 +12,17 @@ const server = express()
 
 const io = socketIO(server);
 
-const lobbies = {};
+const lobbies = [];
 
 io.on("connection", (socket) => {
   console.log("Client connected");
+  socket.on("get-lobbies", () => {
+    socket.emit("give-lobbies", lobbies);
+  });
+
   socket.on("new-game", lname => {
-    lobbies[lname] = {"src":[], "players":[]};
+    lobbies.push({"lname": lname, "src":[], "players":[]});
+    socket.emit("new-lobby", lobbies);
   });
 
   socket.on("send-chat-message", message => {
