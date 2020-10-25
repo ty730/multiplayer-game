@@ -17,7 +17,7 @@ const lobbies = {};
 io.on("connection", (socket) => {
   console.log("Client connected");
   socket.on("new-game", lname => {
-    lobbies.push({lname : {"src":[], "players":[]}});
+    lobbies[lname] = {"src":[], "players":[]};
   });
 
   socket.on("send-chat-message", message => {
