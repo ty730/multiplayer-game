@@ -9,34 +9,13 @@
   window.addEventListener("load", init);
 
   function init() {
-    socket.emit("get-lobbies");
-    socket.on("give-lobbies", updateLobbyList);
     id("new-game").addEventListener("submit", startNewGame);
-  }
-
-  function updateLobbyList(lobbies) {
-    id("lobby-list").innerHTML = "";
-    for (let i = 0; i < lobbies.length; i++) {
-      appendLobby(lobbies[i]);
-    }
-  }
-
-  socket.on("new-lobby", lobby => {
-    // append new lobby
-    appendLobby(lobby);
-    console.log(lobby);
-  });
-
-  function appendLobby(lobby) {
-    let lobby = gen("li")
-    lobby.textContent = lobbies[i].lname;
-    lobby.id = "lobby" + i;
-    id("lobby-list").appendChild(lobby);
   }
 
   function startNewGame(e) {
     e.preventDefault();
-    let lname = id("lname").textContent;
+    let lname = id("lname").value;
+    console.log("before new-game: " + lname);
     socket.emit("new-game", lname);
   }
 
@@ -64,32 +43,6 @@
     return messageElement;
   }
 
-  socket.on("time", (timeString) => {
-    el = document.getElementById("server-time");
-    el.innerHTML = "Server time: " + timeString;
-  });
-
-  
-
-  socket.on("user-connected", name => {
-    let text = appendMessage(name + " connected");
-    text.classList.add("other");
-  });
-
-  socket.on("user-disconnected", name => {
-    let text = appendMessage(name + " disconnected");
-    text.classList.add("other");
-  });
-
-  socket.on("new-player", data => {
-    console.log(data.num);
-    if (data.num == 1) {
-      user1 = data.name;
-    } else if (data.num == 2) {
-      user2 = data.name;
-    }
-    console.log("1: " + user1, "2: " + user2);
-  });
 
   /**
    * Returns the element that has the ID attribute with the specified value.

@@ -9,7 +9,29 @@
   window.addEventListener("load", init);
 
   function init() {
-    
+    socket.emit("get-lobbies");
+    socket.on("give-lobbies", updateLobbyList);
+    socket.on("new-lobby", onNewLobby);
+  }
+
+  function updateLobbyList(lobbies) {
+    console.log("updateLobbyList: " + lobbies)
+    id("lobby-list").innerHTML = "";
+    for (let i = 1; i <= lobbies.length; i++) {
+      appendLobby(lobbies[i], i);
+    }
+  }
+
+  function onNewLobby(lobby) {
+    console.log("WE ARE HERE: " + lobby)
+    appendLobby(lobby, id("lobby-list").childNodes().length);
+  }
+
+  function appendLobby(lobby, i) {
+    let lobbyListItem = gen("li");
+    lobbyListItem.textContent = lobby.lname;
+    lobbyListItem.id = "lobby" + i;
+    id("lobby-list").appendChild(lobbyListItem);
   }
 
   /**
