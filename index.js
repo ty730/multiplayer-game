@@ -13,11 +13,15 @@ const server = express()
 const io = socketIO(server);
 
 const lobbies = [];
+const users = {};
 
 io.on("connection", (socket) => {
-  console.log("Client connected");
+  console.log("Client connected: " + socket.id);
+
+  users[socket.id] = "No name";
 
   socket.on("get-lobbies", () => {
+    console.log("current lobbies are:" + lobbies);
     socket.emit("give-lobbies", lobbies);
   });
 
@@ -26,6 +30,36 @@ io.on("connection", (socket) => {
     lobbies.push(lobby);
     console.log("emit new-lobby: " + lobby);
     socket.emit("new-lobby", lobby);
+  });
+
+  socket.on("join-game", object => {
+    let index = -1;
+    for (let i = 0; i < lobbies.length; i++) {
+      console.log(i + ": " + lobbies[i].lname);
+      if (object.lobby == lobbies[i].lname) {
+        console.log("found name!");
+        index = i;
+      }
+    }
+    if (index == -1) {
+      console.log("no game of name: " + object.lobby);
+      socket.emit("joined-game", null);
+    } else {
+      lobbies[index].players.push(object.player);
+      users[socket.id] = object.player;
+      console.log("joined game: " + object.player);
+      socket.emit("joined-game", lobbies[index]);
+      socket.broadcast.emit("joined-game", lobbies[index]);
+    }
+  });
+
+  socket.on("send-chat-message", message => {
+    socket.broadcast.emit("chat-message", {"message": message, "name": users[socket.id]});
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected: " + socket.id);
+    //socket.broadcast.emit("user-disconnected", users[socket.id]);
   });
 });
 
