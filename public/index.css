@@ -5,3 +5,42 @@ h1 {
 .hidden {
   display: none;
 }
+
+.you {
+  background: lightgray;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: solid black;
+  border-radius: 10px;
+  width: fit-content;
+  margin: 2px;
+}
+
+.other {
+  background: blue;
+  color: white;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: solid black;
+  border-radius: 10px;
+  width: fit-content;
+  margin: 2px;
+}
+
+#chat {
+  border: solid black;
+  border-radius: 20px;
+  padding: 15px;
+  padding-bottom: 0px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+#send-container {
+  margin-top: auto;
+}
+
+#chat {
+  width: 200px;
+}
