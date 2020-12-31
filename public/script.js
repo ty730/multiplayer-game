@@ -120,10 +120,6 @@
       id("join").classList.add("hidden");
       id("ingame").classList.remove("hidden");
       id("joinmessage").textContent = "You joined the lobby: " + lobby.lname + ", waiting for other players...";
-      //id("join-lobby").disabled = true;
-      //id("name").textContent = "";
-      //id("lobbyid").textContent = "";
-
     } else if (lobby.lname == lid) {
       console.log("last on list: " + lobby.players[lobby.players.length - 1]);
       let playerListItem = gen("li");

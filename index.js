@@ -28,7 +28,7 @@ io.on("connection", (socket) => {
 
   // Creates a new lobby with the given lobby name and empty data, adds that lobby to lobbies (global)
   socket.on("new-game", lname => {
-    let lobby = {"lname": lname, "src":[], "players":[]};
+    let lobby = {"lname": lname, "src": socket.id, "players":[]};
     lobbies.push(lobby);
     console.log("emit new-lobby: " + lobby);
     socket.emit("new-lobby", lobby);
@@ -66,6 +66,24 @@ io.on("connection", (socket) => {
   // When current user disconnects
   socket.on("disconnect", () => {
     console.log("Client disconnected: " + socket.id);
+    // Get rid of lobby of disconnected host
+    for (let i = 0; i < lobbies.length; i++) {
+      if (lobbies[i].src == socket.id) { // If a host disconnected
+        let deletedlobby = lobbies.splice(i, 1);
+        // What do we do with the players in the deleted lobby??????????
+        socket.emit("give-lobbies", lobbies);
+      } else {
+        for (let j = 0; j < lobbies[i].players.length; j++) {
+          if (lobbies[i].players[j] == users[socket.id]) { // If a player disconnects
+            console.log("player disconnected: " + users[socket.id]);
+            //socket.emit("player-disconnected", {"player": users[socket.id], "lobby": lobbies[i].lname});
+          }
+        }
+      }
+    }
+
+
+
     //socket.broadcast.emit("user-disconnected", users[socket.id]);
   });
 });
