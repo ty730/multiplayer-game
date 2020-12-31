@@ -2,6 +2,10 @@ h1 {
   text-align: center;
 }
 
+body {
+  text-align: center;
+}
+
 .hidden {
   display: none;
 }

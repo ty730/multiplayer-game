@@ -9,9 +9,10 @@
   window.addEventListener("load", init);
 
   function init() {
+    // When you open the website get the currently available lobbies
     socket.emit("get-lobbies");
     socket.on("give-lobbies", updateLobbyList);
-    console.log("started");
+
     id("hostbtn").addEventListener("click", host);
     id("joinbtn").addEventListener("click", join);
     id("new-game").addEventListener("submit", startNewGame);
@@ -19,21 +20,31 @@
     socket.on("new-lobby", onNewLobby);
     socket.on("joined-game", playerJoined);
 
+    // For messaging other players once you've joined a lobby
     id("send-container").addEventListener("submit", writeMessage);
   }
 
+   /**
+   * Takes you to the host screen
+   */
   function host() {
     console.log("hosting");
     id("main").classList.add("hidden");
     id("host").classList.remove("hidden");
   }
 
+  /**
+   * Takes you to the join screen
+   */
   function join() {
     console.log("joining");
     id("main").classList.add("hidden");
     id("join").classList.remove("hidden");
   }
 
+  /**
+   * Hosts a new game on the lobby name inputted by the user
+   */
   function startNewGame(e) {
     e.preventDefault();
     let lname = id("lname").value;
@@ -45,9 +56,12 @@
     id("host").classList.add("hidden");
     id("hostedname").textContent = lname;
     id("hosted").classList.remove("hidden");
-
   }
 
+  /**
+   * Attempts to get the user to join the lobby that they inputed
+   * with the name they inputted. The join might not work if lobby name isnt correct.
+   */
   function joinGame(e) {
     e.preventDefault();
     let name = id("name").value;
@@ -59,6 +73,9 @@
     socket.emit("join-game", object);
   }
 
+  /**
+   * Helper function to put all of the names of the lobbies onto the page
+   */
   function updateLobbyList(lobbies) {
     console.log("updateLobbyList: " + lobbies)
     id("lobby-list").innerHTML = "";
@@ -67,11 +84,17 @@
     }
   }
 
+  /**
+   * When a new lobby is created, adds it to the list of lobbies
+   */
   function onNewLobby(lobby) {
     console.log("WE ARE HERE: " + lobby)
     appendLobby(lobby, id("lobby-list").childNodes.length);
   }
 
+  /**
+   * Helper function to append a new lobby to the lobby list
+   */
   function appendLobby(lobby, i) {
     let lobbyListItem = gen("li");
     lobbyListItem.textContent = lobby.lname;
@@ -79,6 +102,13 @@
     id("lobby-list").appendChild(lobbyListItem);
   }
 
+  /**
+   * Player is attempting to join a lobby. If the newest player in the lobby
+   * is the current players name (global variable) then admit them into the lobby.
+   * If the current player is not the player, then check the lobby id (lid, global variable),
+   * if that is the lobby then we might be the host, so append the new players name
+   * to list of players in the lobby.
+   */
   function playerJoined(lobby) {
     console.log("playername: " + playername);
     if (lobby == null) {
@@ -105,6 +135,10 @@
     }
   }
 
+  /**
+   * When a player sends a message this writes the message and sends the message
+   * to other players
+   */
   function writeMessage(event) {
     event.preventDefault();
     let messageInput = document.getElementById("input");
@@ -115,6 +149,9 @@
     messageInput.value = "";
   }
 
+  /**
+   * Helper function to append new messages to the chat
+   */
   function appendMessage(message) {
     let messageElement = document.createElement("div");
     messageElement.innerText = message;
@@ -122,7 +159,9 @@
     messageContainter.append(messageElement);
     return messageElement;
   }
-
+  /**
+   * When a different player sends a message then append it to the chat.
+   */
   socket.on("chat-message", data => {
     console.log(data.name, data.message);
     let text = appendMessage(data.name + ": " + data.message);

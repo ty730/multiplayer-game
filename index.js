@@ -20,11 +20,13 @@ io.on("connection", (socket) => {
 
   users[socket.id] = "No name";
 
+  // When they ask for the lobbies, give the lobbies
   socket.on("get-lobbies", () => {
     console.log("current lobbies are:" + lobbies);
     socket.emit("give-lobbies", lobbies);
   });
 
+  // Creates a new lobby with the given lobby name and empty data, adds that lobby to lobbies (global)
   socket.on("new-game", lname => {
     let lobby = {"lname": lname, "src":[], "players":[]};
     lobbies.push(lobby);
@@ -32,6 +34,9 @@ io.on("connection", (socket) => {
     socket.emit("new-lobby", lobby);
   });
 
+  // Player attempt to join, search through lobbies for matching name.
+  // If no name found send back null, otherwise add that player to that lobby,
+  // and send back the updated lobby
   socket.on("join-game", object => {
     let index = -1;
     for (let i = 0; i < lobbies.length; i++) {
@@ -53,10 +58,12 @@ io.on("connection", (socket) => {
     }
   });
 
+  // Sends a chat message and current users name to other sockets
   socket.on("send-chat-message", message => {
     socket.broadcast.emit("chat-message", {"message": message, "name": users[socket.id]});
   });
 
+  // When current user disconnects
   socket.on("disconnect", () => {
     console.log("Client disconnected: " + socket.id);
     //socket.broadcast.emit("user-disconnected", users[socket.id]);
