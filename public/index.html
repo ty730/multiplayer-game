@@ -37,7 +37,7 @@
     <!-- Screen of the host when the game is being played-->
     <div id="gamescreen" class="hidden">
       <h1>This is the game</h1>
-      <h2>*Insert photo here*</h2>
+      <div id="image-container"></div>
       <p></p>
     </div>
 
@@ -60,6 +60,13 @@
     <div id="ingame" class="hidden">
       <h2 id="joinmessage"></h2>
       <br>
+      <div id="answer" class="hidden">
+        <form id="caption-form">
+          <h2>Enter a fake caption for this instagram post</h2>
+          <input type="text" id="caption">
+          <button type="submit" id="submit-caption">Submit</button>
+        </form>
+      </div>
       <h2>Chat</h2>
       <div id="chat">
         <div id="messages"></div>

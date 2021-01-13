@@ -17,8 +17,12 @@
     id("joinbtn").addEventListener("click", join);
     id("new-game").addEventListener("submit", startNewGame);
     id("join-game").addEventListener("submit", joinGame);
+    id("begin").addEventListener("click", begin);
     socket.on("new-lobby", onNewLobby);
     socket.on("joined-game", playerJoined);
+    socket.on("begin-game", beginGame);
+    socket.on("get-caption", getCaption);
+    id("caption-form").addEventListener("submit", collectAnswer);
 
     // For messaging other players once you've joined a lobby
     id("send-container").addEventListener("submit", writeMessage);
@@ -128,7 +132,60 @@
       players.push(lobby.players[lobby.players.length - 1]);
       //playerListItem.id = "player";
       id("player-list").appendChild(playerListItem);
+
+      if (players.length >= 2) {
+        id("begin").disabled = false;
+      }
     }
+  }
+
+  /**
+   * When a player sends a message this writes the message and sends the message
+   * to other players
+   */
+  function begin() {
+    id("hosted").classList.add("hidden");
+    id("gamescreen").classList.remove("hidden");
+    socket.emit("begin", players);
+    setTimeout(displayImage, 3000);
+  }
+
+  /**
+   *
+   */
+  function beginGame(playerArr) {
+    console.log("THE GAME STARTED");
+    if (playerArr.includes(playername)) {
+      id("joinmessage").textContent = "Game has started";
+    }
+  }
+
+  /**
+   *
+   */
+  function displayImage() {
+    let image = gen("img");
+    image.src = "images/colby.JPG";
+    id("image-container").appendChild(image);
+    let index = 1;
+    socket.emit("image-displayed", index);
+  }
+
+  /**
+   *
+   */
+  function getCaption() {
+    id("answer").classList.remove("hidden");
+  }
+
+  /**
+   *
+   */
+  function collectAnswer(e) {
+    e.preventDefault();
+    console.log("target: " + e.target);
+    let caption = id("caption").value;
+    console.log("caption: " + caption);
   }
 
   /**

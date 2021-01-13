@@ -58,6 +58,14 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("begin", arr => {
+    socket.broadcast.emit("begin-game", arr);
+  });
+
+  socket.on("image-displayed", index => {
+    socket.broadcast.emit("get-caption");
+  });
+
   // Sends a chat message and current users name to other sockets
   socket.on("send-chat-message", message => {
     socket.broadcast.emit("chat-message", {"message": message, "name": users[socket.id]});
