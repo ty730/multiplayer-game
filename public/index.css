@@ -1,14 +1,87 @@
 h1 {
+  margin-top: 10%;
   text-align: center;
+  font-size: 50pt;
 }
 
 body {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  font-family: 'Open Sans', sans-serif;
+  text-align: center;
+}
+
+button {
+  border: solid black;
+  color: white;
+  background-color:black;
+  border-radius: 14px;
+  font-size: 24px;
+  padding: 7px;
+  margin: 5px;
+  width: 100%;
+}
+
+button:hover {
+  background: transparent;
+  border: solid white;
+  transition: 0.5s;
+}
+
+#main > button, #begin {
+  width: auto;
+}
+
+.form-div {
+  border-radius: 5px;
+  padding: 20px;
+  margin: auto;
+  width: 40%;
+  text-align: left;
   display: flex;
-  justify-content: center;
+}
+
+label {
+  font-size: 18pt;
+}
+
+input {
+  /*border: 0;
+  border-radius: 2px;
+  box-shadow: 2px 2px 8px black;
+  width: 20%;
+  height: 5%;
+  */
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+@keyframes gradient {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
 }
 
 .hidden {
   display: none;
+}
+
+
+#main > button {
+  margin: 3%;
+  padding: 15px;
 }
 
 .you {
@@ -40,6 +113,8 @@ body {
   min-height: 200px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  margin: auto;
 }
 
 #send-container {

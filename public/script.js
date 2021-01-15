@@ -123,7 +123,7 @@
       console.log("player joined game: " + lobby.players[0]);
       id("join").classList.add("hidden");
       id("ingame").classList.remove("hidden");
-      id("joinmessage").textContent = "You joined the lobby: " + lobby.lname + ", waiting for other players...";
+      id("joinmessage").textContent = "You joined: " + lobby.lname + ", waiting for other players...";
     } else if (lobby.lname == lid) {
       console.log("last on list: " + lobby.players[lobby.players.length - 1]);
       let playerListItem = gen("li");
@@ -134,7 +134,7 @@
       id("player-list").appendChild(playerListItem);
 
       if (players.length >= 2) {
-        id("begin").disabled = false;
+        id("begin").classList.remove("hidden");
       }
     }
   }

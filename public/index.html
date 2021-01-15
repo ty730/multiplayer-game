@@ -5,31 +5,34 @@
     <script src="script.js"></script>
     <link href="index.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
     <!-- Starting screen when you open up website initially-->
     <div id="main">
       <h1>Multiplayer Game</h1>
-      <p>This is our multiplayer game.</p>
-      <button id="hostbtn">Host Game</button>
-      <button id="joinbtn">Join Game</button>
+      <button id="hostbtn">Host game</button>
+      <button id="joinbtn">Join game</button>
     </div>
 
     <!-- Screen to start hosting a game-->
     <div id="host" class="hidden">
-      <h1>Choose your settings to host a game!</h1>
-      <form id="new-game">
-        <label for="lname">Lobby Name:</label>
-        <input type="text" id="lname" name="lname"><br><br>
-        <button form="new-game" id="create-lobby">Create Lobby</button>
-      </form>
+      <h1>Multiplayer Game</h1>
+      <div class="form-div">
+        <form id="new-game">
+          <label for="lname" >Lobby Name:</label>
+          <input type="text" id="lname" name="lname" >
+          <button form="new-game" id="create-lobby">Create</button>
+        </form>
+      </div>
+
     </div>
 
     <!-- Screen once you have hosted and are waiting for players-->
     <div id="hosted" class="hidden">
-      <h1>You have hosted the lobby: <span id="hostedname"></span></h1>
+      <h1>Hosted the lobby: <span id="hostedname"></span></h1>
       <h2>Waiting for players...</h2>
-      <button id="begin" disabled>Begin Game!</button>
+      <button id="begin" class="hidden">Begin Game!</button>
       <ol id="player-list">
       </ol>
     </div>
@@ -43,17 +46,19 @@
 
     <!-- Screen to enter a name and name of lobby to join that lobby-->
     <div id="join" class="hidden">
-      <h1>List of lobbies:</h1>
+      <h1>Enter your info:</h1>
+      <div class="form-div">
+        <form id="join-game">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name">
+          <label for="lobbyid">Lobby:</label>
+          <input type="text" id="lobbyid" name="lobbyid"><br><br>
+          <button form="join-game" id="join-lobby">Join</button>
+        </form>
+      </div>
+      <h2>List of lobbies:</h2>
       <ol id="lobby-list">
       </ol>
-      <h1>Enter your info:</h1>
-      <form id="join-game">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name">
-        <label for="lobbyid">Lobby Name:</label>
-        <input type="text" id="lobbyid" name="lobbyid"><br><br>
-        <button form="join-game" id="join-lobby">Join!</button>
-      </form>
     </div>
 
     <!-- Screen for joined player once they have entered lobby/game-->
@@ -71,7 +76,7 @@
       <div id="chat">
         <div id="messages"></div>
         <form id="send-container">
-          <input type="text" id="input">
+          <input type="text" id="input" placeholder="message">
           <button type="submit" id="submit-btn">Send</button>
         </form>
       </div>
