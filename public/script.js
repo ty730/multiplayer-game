@@ -26,6 +26,7 @@
 
     // For messaging other players once you've joined a lobby
     id("send-container").addEventListener("submit", writeMessage);
+    id("toggle-chat").addEventListener("click", toggleChat);
   }
 
    /**
@@ -230,6 +231,29 @@
     let text = appendMessage(name + " disconnected");
     text.classList.add("other");
   }); */
+
+  /**
+   * Toggles the chat window
+   */
+  function toggleChat() {
+    let state = id("toggle-chat").value;
+    console.log("state: " + state);
+    if (state == "open") {
+      console.log("open to close");
+      id("toggle-chat").value = "closed";
+      id("toggle-chat").textContent = "Open chat";
+      id("toggle-chat").classList.add("open-chat");
+      id("toggle-chat").classList.remove("close-chat");
+      id("chat").style.display = "none";
+    } else {
+      console.log("close to open");
+      id("toggle-chat").value = "open";
+      id("chat").style.display = "";
+      id("toggle-chat").textContent = "Close chat";
+      id("toggle-chat").classList.remove("open-chat");
+      id("toggle-chat").classList.add("close-chat");
+    }
+  }
 
   /**
    * Returns the element that has the ID attribute with the specified value.

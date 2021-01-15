@@ -29,8 +29,37 @@ button:hover {
   transition: 0.5s;
 }
 
-#main > button, #begin {
+ol {
+  display: inline-block;
+  text-align: left;
+}
+
+#main > button, #begin, #caption, #submit-caption, #toggle-chat {
   width: auto;
+}
+
+.close-chat {
+  background-color: red;
+  border: solid red;
+}
+
+.close-chat:hover {
+  background: transparent;
+  border: solid red;
+  color: red;
+  transition: 0.5s;
+}
+
+.open-chat {
+  background-color: green;
+  border: solid green;
+}
+
+.open-chat:hover {
+  background: transparent;
+  border: solid green;
+  color: green;
+  transition: 0.5s;
 }
 
 .form-div {
@@ -49,10 +78,11 @@ label {
 input {
   /*border: 0;
   border-radius: 2px;
-  box-shadow: 2px 2px 8px black;
+
   width: 20%;
   height: 5%;
   */
+  box-shadow: 2px 2px 8px black;
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -105,7 +135,7 @@ input {
   margin: 2px;
 }
 
-#chat {
+.thechat {
   border: solid black;
   border-radius: 20px;
   padding: 15px;
