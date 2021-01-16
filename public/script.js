@@ -23,10 +23,12 @@
     socket.on("begin-game", beginGame);
     socket.on("get-caption", getCaption);
     id("caption-form").addEventListener("submit", collectAnswer);
+    socket.on("all-captions", allCaptions);
 
     // For messaging other players once you've joined a lobby
     id("send-container").addEventListener("submit", writeMessage);
     id("toggle-chat").addEventListener("click", toggleChat);
+    socket.on("player-disconnected", playerDisconnected);
   }
 
    /**
@@ -72,9 +74,8 @@
     let name = id("name").value;
     playername = name;
     let lobbyId = id("lobbyid").value;
+    lid = lobbyId;
     let object = {"lobby": lobbyId, "player": name};
-    console.log("before join-game: " + lobbyId);
-    console.log("person name: " + name);
     socket.emit("join-game", object);
   }
 
@@ -82,7 +83,6 @@
    * Helper function to put all of the names of the lobbies onto the page
    */
   function updateLobbyList(lobbies) {
-    console.log("updateLobbyList: " + lobbies)
     id("lobby-list").innerHTML = "";
     for (let i = 0; i < lobbies.length; i++) {
       appendLobby(lobbies[i], i);
@@ -125,7 +125,7 @@
       id("join").classList.add("hidden");
       id("ingame").classList.remove("hidden");
       id("joinmessage").textContent = "You joined: " + lobby.lname + ", waiting for other players...";
-    } else if (lobby.lname == lid) {
+    } else if (lobby.lname == lid && !lobby.players.includes(playername)) {
       console.log("last on list: " + lobby.players[lobby.players.length - 1]);
       let playerListItem = gen("li");
       playerListItem.textContent = lobby.players[lobby.players.length - 1];
@@ -155,7 +155,6 @@
    *
    */
   function beginGame(playerArr) {
-    console.log("THE GAME STARTED");
     if (playerArr.includes(playername)) {
       id("joinmessage").textContent = "Game has started";
     }
@@ -187,6 +186,27 @@
     console.log("target: " + e.target);
     let caption = id("caption").value;
     console.log("caption: " + caption);
+    id("answer").classList.add("hidden");
+    console.log("lid: " + lid);
+
+    socket.emit("answer", {"lname": lid, "player": playername, "caption": caption});
+  }
+
+  /**
+   *
+   */
+  function allCaptions(arr) {
+    console.log(arr);
+    for (let i = 0; i < arr.length; i++) {
+      setTimeout(displayCaption, 2000, arr[i]);
+    }
+  }
+
+  /**
+   *
+   */
+  function displayCaption(obj) {
+    id("image-caption").textContent = obj.caption;
   }
 
   /**
@@ -207,7 +227,7 @@
    * Helper function to append new messages to the chat
    */
   function appendMessage(message) {
-    let messageElement = document.createElement("div");
+    let messageElement = document.createElement("p");
     messageElement.innerText = message;
     let messageContainter = document.getElementById("messages");
     messageContainter.append(messageElement);
@@ -217,7 +237,6 @@
    * When a different player sends a message then append it to the chat.
    */
   socket.on("chat-message", data => {
-    console.log(data.name, data.message);
     let text = appendMessage(data.name + ": " + data.message);
     text.classList.add("other");
   });
@@ -226,11 +245,6 @@
     let text = appendMessage(name + " connected");
     text.classList.add("other");
   });
-
-  socket.on("user-disconnected", name => {
-    let text = appendMessage(name + " disconnected");
-    text.classList.add("other");
-  }); */
 
   /**
    * Toggles the chat window
@@ -248,10 +262,20 @@
     } else {
       console.log("close to open");
       id("toggle-chat").value = "open";
-      id("chat").style.display = "";
+      id("chat").style.display = "flex";
       id("toggle-chat").textContent = "Close chat";
       id("toggle-chat").classList.remove("open-chat");
       id("toggle-chat").classList.add("close-chat");
+    }
+  }
+
+  /**
+   * Deletes the disconnected player
+   */
+  function playerDisconnected(obj) {
+    let index = players.indexOf(obj.player);
+    if (index != -1) {
+      players.splice(index, 1);
     }
   }
 

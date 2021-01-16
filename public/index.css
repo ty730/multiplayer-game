@@ -30,12 +30,20 @@ button:hover {
 }
 
 ol {
-  display: inline-block;
   text-align: left;
+}
+
+.list-wrapper {
+  display: flex;
+  justify-content: center;
 }
 
 #main > button, #begin, #caption, #submit-caption, #toggle-chat {
   width: auto;
+}
+
+#join-game, #new-game {
+  width: 100%;
 }
 
 .close-chat {
@@ -66,7 +74,7 @@ ol {
   border-radius: 5px;
   padding: 20px;
   margin: auto;
-  width: 40%;
+  width: 30%;
   text-align: left;
   display: flex;
 }
@@ -152,5 +160,16 @@ input {
 }
 
 #chat {
+  width: 230px;
+}
+
+#messages {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   width: 200px;
+  text-align: left;
+}
+
+#messages > p {
+  max-width: 100%;
 }

@@ -14,6 +14,7 @@ const io = socketIO(server);
 
 const lobbies = [];
 const users = {};
+const answers = {};
 
 io.on("connection", (socket) => {
   console.log("Client connected: " + socket.id);
@@ -66,6 +67,28 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("get-caption");
   });
 
+  socket.on("answer", object => {
+    console.log(object);
+    if (answers[object.lname]) {
+      answers[object.lname].push({"player": object.player, "caption": object.caption});
+    } else {
+      answers[object.lname] = [{"player": object.player, "caption": object.caption}];
+    }
+    let index = -1;
+    for (let i = 0; i < lobbies.length; i++) {
+      if (object.lname == lobbies[i].lname) {
+        index = i;
+      }
+    }
+    if (index != -1) {
+      if (answers[object.lname].length >= lobbies[index].players.length) {
+        socket.broadcast.emit("all-captions", answers[object.lname]);
+        // Clear the answers
+        answers[object.lname] = null;
+      }
+    }
+  });
+
   // Sends a chat message and current users name to other sockets
   socket.on("send-chat-message", message => {
     socket.broadcast.emit("chat-message", {"message": message, "name": users[socket.id]});
@@ -84,7 +107,8 @@ io.on("connection", (socket) => {
         for (let j = 0; j < lobbies[i].players.length; j++) {
           if (lobbies[i].players[j] == users[socket.id]) { // If a player disconnects
             console.log("player disconnected: " + users[socket.id]);
-            //socket.emit("player-disconnected", {"player": users[socket.id], "lobby": lobbies[i].lname});
+            lobbies[i].players.splice(j, 1);
+            socket.emit("player-disconnected", {"player": users[socket.id], "lobby": lobbies[i].lname});
           }
         }
       }

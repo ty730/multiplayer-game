@@ -32,16 +32,18 @@
     <div id="hosted" class="hidden">
       <h1>Hosted the lobby: <span id="hostedname"></span></h1>
       <h2>Waiting for players...</h2>
+      <div class="list-wrapper">
+        <ol id="player-list">
+        </ol>
+      </div>
       <button id="begin" class="hidden">Begin Game!</button>
-      <ol id="player-list">
-      </ol>
     </div>
 
     <!-- Screen of the host when the game is being played-->
     <div id="gamescreen" class="hidden">
       <h1>Caption this image</h1>
       <div id="image-container"></div>
-      <p></p>
+      <p id="image-caption"></p>
     </div>
 
     <!-- Screen to enter a name and name of lobby to join that lobby-->
@@ -57,8 +59,10 @@
         </form>
       </div>
       <h2>List of lobbies:</h2>
-      <ol id="lobby-list">
-      </ol>
+      <div class="list-wrapper">
+        <ol id="lobby-list">
+        </ol>
+      </div>
     </div>
 
     <!-- Screen for joined player once they have entered lobby/game-->
