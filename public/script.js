@@ -26,6 +26,7 @@
     socket.on("get-caption", getCaption);
     id("caption-form").addEventListener("submit", collectAnswer);
     socket.on("all-captions", allCaptions);
+    socket.on("vote", displayVoteOptions);
 
     // For messaging other players once you've joined a lobby
     id("send-container").addEventListener("submit", writeMessage);
@@ -225,7 +226,15 @@
    */
   function allCaptions(arr) {
     console.log(arr);
-    setTimeout(displayCaption, 1000, arr, 0);
+    let host = true;
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].player == playername) {
+        host = false;
+      }
+    }
+    if (host) {
+      setTimeout(displayCaption, 1000, arr, 0);
+    }
   }
 
   /**
@@ -234,19 +243,41 @@
   function displayCaption(arr, i) {
     console.log("display caption called " + i);
     if (i >= arr.length) {
-      vote();
+      vote(arr);
     } else {
       id("image-caption").textContent = arr[i].caption;
       //do other stuff in between captions
-      setTimeout(displayCaption, 3000, arr, i + 1);
+      setTimeout(displayCaption, 1000, arr, i + 1);
     }
   }
 
     /**
    *
    */
-  function vote() {
+  function vote(arr) {
+    console.log("called vote");
+    for (let i = 0; i < arr.length; i++) {
+      if (playername != arr[i].player) {
+        let btn = gen("button");
+        btn.textContent = arr[i].caption;
+        id("image-container").appendChild(btn);
+      }
+    }
+    socket.emit("create-voting", arr);
+  }
 
+  /**
+   *
+   * @param {} arr
+   */
+  function displayVoteOptions(arr) {
+    for (let i = 0; i < arr.length; i++) {
+      if (playername != arr[i].player) {
+        let btn = gen("button");
+        btn.textContent = arr[i].caption;
+        id("captions").appendChild(btn);
+      }
+    }
   }
 
   /**

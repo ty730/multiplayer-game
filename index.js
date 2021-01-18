@@ -89,6 +89,10 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("create-voting", arr => {
+    socket.broadcast.emit("vote", arr);
+  });
+
   // Sends a chat message and current users name to other sockets
   socket.on("send-chat-message", message => {
     socket.broadcast.emit("chat-message", {"message": message, "name": users[socket.id]});
