@@ -5,6 +5,8 @@
   let lid = "";
   let playername = "";
   let players = [];
+  
+  let timeLeft = 0;
 
   window.addEventListener("load", init);
 
@@ -134,7 +136,7 @@
       //playerListItem.id = "player";
       id("player-list").appendChild(playerListItem);
 
-      if (players.length >= 2) {
+      if (players.length >= 1) {
         id("begin").classList.remove("hidden");
       }
     }
@@ -148,7 +150,33 @@
     id("hosted").classList.add("hidden");
     id("gamescreen").classList.remove("hidden");
     socket.emit("begin", players);
-    setTimeout(displayImage, 3000);
+    // countdown to image
+    countdown(3, "countdown", displayImage);
+    // setTimeout(displayImage, 3000);
+  }
+
+  /**
+   * 
+   * @param {Amount of time to start counting down (in seconds)} time 
+   * @param {ID of element to display countdown} displayId 
+   * @param {Function called when countdown reaches 0} whenFinished 
+   */
+  function countdown(time, displayId, whenFinished) {
+    let countdownInterval = setInterval(count, 1000);
+    let timeLeft = time;
+    let display = displayId;
+    id(display).classList.remove("hidden");
+    id(display).innerHTML = timeLeft;
+    function count() {
+      if (timeLeft == 1) {
+        clearInterval(countdownInterval);
+        id(display).classList.add("hidden");
+        whenFinished();
+      } else {
+        timeLeft--;
+        id(display).innerHTML = timeLeft;
+      }
+    }
   }
 
   /**
