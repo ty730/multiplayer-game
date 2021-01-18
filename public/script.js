@@ -5,7 +5,7 @@
   let lid = "";
   let playername = "";
   let players = [];
-  
+
   let timeLeft = 0;
 
   window.addEventListener("load", init);
@@ -156,10 +156,10 @@
   }
 
   /**
-   * 
-   * @param {Amount of time to start counting down (in seconds)} time 
-   * @param {ID of element to display countdown} displayId 
-   * @param {Function called when countdown reaches 0} whenFinished 
+   *
+   * @param {Amount of time to start counting down (in seconds)} time
+   * @param {ID of element to display countdown} displayId
+   * @param {Function called when countdown reaches 0} whenFinished
    */
   function countdown(time, displayId, whenFinished) {
     let countdownInterval = setInterval(count, 1000);
@@ -225,16 +225,28 @@
    */
   function allCaptions(arr) {
     console.log(arr);
-    for (let i = 0; i < arr.length; i++) {
-      setTimeout(displayCaption, 2000, arr[i]);
-    }
+    setTimeout(displayCaption, 1000, arr, 0);
   }
 
   /**
    *
    */
-  function displayCaption(obj) {
-    id("image-caption").textContent = obj.caption;
+  function displayCaption(arr, i) {
+    console.log("display caption called " + i);
+    if (i >= arr.length) {
+      vote();
+    } else {
+      id("image-caption").textContent = arr[i].caption;
+      //do other stuff in between captions
+      setTimeout(displayCaption, 3000, arr, i + 1);
+    }
+  }
+
+    /**
+   *
+   */
+  function vote() {
+
   }
 
   /**

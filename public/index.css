@@ -181,3 +181,11 @@ input {
 .game-caption {
   font-size: 32pt;
 }
+
+#countdown {
+  font-size: 50pt;
+}
+
+#image-caption {
+  font-size: 28pt;
+}
